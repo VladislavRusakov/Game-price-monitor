@@ -4,6 +4,9 @@ driver = webdriver.Firefox()
 driver.minimize_window()
 out = open(' result.txt', 'w')
 
+# This main function does multiple things: goes to the link, you've passed it, prints game's name, which is always in the end of the link
+# finds and prints all actual game prices from lowest to highest. Output adds to the result.txt, but the code could be rewrited to print it all out to the console.
+
 def funk(link):
     driver.get(link)
     search = driver.find_elements_by_class_name("price-value")
