@@ -1,6 +1,11 @@
 from selenium import webdriver
 from tkinter import *
 
+"""
+************************
+* 12.08.20. GUI added. *
+************************
+"""
 
 root = Tk()
 root.geometry("700x500")
@@ -16,10 +21,16 @@ output = Text(width=100, height=60)
 output.pack()
 
 
+# console function takes text from txt file and prints it out into the text window
+
+
 def console():
     f = open(" result.txt")
     output.insert(1.0, f.read())
     f.close()
+
+    
+# funk is a main finction. It works with webdriver, searches the information on web site and pushes in into a txt file.
 
 
 def funk():
