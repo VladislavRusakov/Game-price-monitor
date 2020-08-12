@@ -1,36 +1,48 @@
 from selenium import webdriver
-
-driver = webdriver.Firefox()
-driver.minimize_window()
-out = open(' result.txt', 'w')
-
-# This main function does multiple things: goes to the link, you've passed it, prints game's name, which is always in the end of the link
-# finds and prints all actual game prices from lowest to highest. Output adds to the result.txt, but the code could be rewrited to print it all out to the console.
-
-def funk(link):
-    driver.get(link)
-    search = driver.find_elements_by_class_name("price-value")
-    temp = link.split('/')
-    print('\n', temp[-1], file= out)
-    for i in search:
-        print(i.text, end=' ', file= out)
+from tkinter import *
 
 
-# Here you can just run function funk with any link to hot-game resource, you want
-# If it exists, it will work. But ofc it requires a webdriver installation and adding it to PATH
+root = Tk()
+root.geometry("700x500")
+root.title("Game price checker")
 
-funk("https://hot-game.info/game/Death-Stranding")
 
-funk("https://hot-game.info/game/Thronebreaker-The-Witcher-Tales")
+go = Button(text="Print results", bg="green", command=lambda: console()).pack(side=TOP)
+button = Button(text="Exit", fg="white", bg= "red", command=root.destroy).pack(side=BOTTOM)
+push = Button(text="RUN", bg="yellow", command=lambda: funk()).pack(side=TOP)
 
-funk("https://hot-game.info/game/Cyberpunk-2077")
 
-funk("https://hot-game.info/game/Desperados-III")
+output = Text(width=100, height=60)
+output.pack()
 
-funk("https://hot-game.info/game/Remnant-From-the-Ashes")
 
-funk("https://hot-game.info/game/Mafia-Definitive-Edition")
+def console():
+    f = open(" result.txt")
+    output.insert(1.0, f.read())
+    f.close()
 
-out.close()
-driver.quit()
 
+def funk():
+    driver = webdriver.Firefox()
+    driver.minimize_window()
+    out = open(' result.txt', 'w')
+    data_array = ["https://hot-game.info/game/Death-Stranding",
+                  "https://hot-game.info/game/Thronebreaker-The-Witcher-Tales",
+                  "https://hot-game.info/game/Cyberpunk-2077",
+                  "https://hot-game.info/game/Desperados-III",
+                  "https://hot-game.info/game/Remnant-From-the-Ashes",
+                  "https://hot-game.info/game/Mafia-Definitive-Edition",
+                  "https://hot-game.info/game/The-Outer-Worlds",
+                  "https://hot-game.info/game/Quantum-Break"]
+    for link in data_array:
+        driver.get(link)
+        search = driver.find_elements_by_class_name("price-value")
+        temp = link.split('/')
+        print('\n', temp[-1], file= out)
+        for i in search:
+            print(i.text, end=' ', file= out)
+    out.close()
+    driver.quit()
+
+
+root.mainloop()
