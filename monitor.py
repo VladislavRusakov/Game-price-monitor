@@ -24,7 +24,7 @@ def get_name(mode: str = "input") -> None:
             data = file.read().splitlines()
         request_caller_for_lists(data)
     else:
-        print("Incorrect mode")
+        print("Доступные режимы - text - input")
 
 
 def make_an_url(name: str) -> str:
@@ -33,11 +33,10 @@ def make_an_url(name: str) -> str:
     for index, _ in enumerate(names):
         names[index] = _.capitalize()
     url = f"https://hot-game.info/game/{'-'.join(names)}"
-    print(url)
     get_data_from_hotgame(url)
 
 
-def mode_selector():
+def mode_selector() -> None:
     """Вызывает get_name, передавая туда название
     режима из консоли. Если режима нет, просто вызывает
     get_name()
@@ -51,9 +50,8 @@ def mode_selector():
 
 def get_data_from_hotgame(url: str) -> None:
     """Обращается к сайту hot-games.info
-    Парсит HTML, находит нужную строчку с ценой
-    Печатает её в консоль
-    """
+    Парсит HTML, находит нужную строчку с ценой,
+    печатает её в консоль"""
     print(url, end=" - ")
     response = requests.get(url)
     if str(response.status_code) == "404":
@@ -62,7 +60,7 @@ def get_data_from_hotgame(url: str) -> None:
     elif str(response.status_code) == "200":
         soup = BS(response.text, "html.parser")
         data = soup.findAll('span', class_="price-value")
-        pattern = (r'data-final_price="(\d)*"')
+        pattern = (r'data-final_price="(\d)*(\.)(\d*)"')
         result = re.search(pattern, str(data[0]))
         print(result.group(0))
 
