@@ -17,7 +17,7 @@ def get_data_from_hotgame(url: str) -> None:
     elif str(response.status_code) == "200":
         soup = BS(response.text, "html.parser")
         data = soup.findAll('span', class_="price-value")
-        pattern = (r'data-final_price="(\d)*(\.)(\d*)"')
+        pattern = (r'data-final_price="(\d)*(\.)?(\d)*"')
         result = re.search(pattern, str(data[0]))
         print(result.group(0))
 
