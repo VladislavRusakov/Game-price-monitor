@@ -5,6 +5,32 @@ import re
 from bs4 import BeautifulSoup as BS
 
 
+def get_data_from_hotgame(url: str) -> None:
+    """Обращается к сайту hot-games.info
+    Парсит HTML, находит нужную строчку с ценой,
+    печатает её в консоль"""
+    print(url, end=" - ")
+    response = requests.get(url)
+    if str(response.status_code) == "404":
+        print("Game not found")
+
+    elif str(response.status_code) == "200":
+        soup = BS(response.text, "html.parser")
+        data = soup.findAll('span', class_="price-value")
+        pattern = (r'data-final_price="(\d)*(\.)(\d*)"')
+        result = re.search(pattern, str(data[0]))
+        print(result.group(0))
+
+
+def make_an_url(name: str) -> str:
+    """Создаёт корректную ссылку на хотгейм"""
+    names = name.split(" ")
+    for index, _ in enumerate(names):
+        names[index] = _.capitalize()
+    url = f"https://hot-game.info/game/{'-'.join(names)}"
+    get_data_from_hotgame(url)
+
+
 def request_caller_for_lists(data: list[str]) -> None:
     """Вызывает функцию обращения по для каждой ссылки списка"""
     for url in data:
@@ -27,15 +53,6 @@ def get_name(mode: str = "input") -> None:
         print("Доступные режимы - text - input")
 
 
-def make_an_url(name: str) -> str:
-    """Создаёт корректную ссылку на хотгейм"""
-    names = name.split(" ")
-    for index, _ in enumerate(names):
-        names[index] = _.capitalize()
-    url = f"https://hot-game.info/game/{'-'.join(names)}"
-    get_data_from_hotgame(url)
-
-
 def mode_selector() -> None:
     """Вызывает get_name, передавая туда название
     режима из консоли. Если режима нет, просто вызывает
@@ -46,23 +63,6 @@ def mode_selector() -> None:
         get_name(mode)
     except IndexError:
         get_name()
-
-
-def get_data_from_hotgame(url: str) -> None:
-    """Обращается к сайту hot-games.info
-    Парсит HTML, находит нужную строчку с ценой,
-    печатает её в консоль"""
-    print(url, end=" - ")
-    response = requests.get(url)
-    if str(response.status_code) == "404":
-        print("Game not found")
-
-    elif str(response.status_code) == "200":
-        soup = BS(response.text, "html.parser")
-        data = soup.findAll('span', class_="price-value")
-        pattern = (r'data-final_price="(\d)*(\.)(\d*)"')
-        result = re.search(pattern, str(data[0]))
-        print(result.group(0))
 
 
 mode_selector()
