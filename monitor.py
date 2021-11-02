@@ -31,6 +31,12 @@ def make_an_url(name: str) -> str:
     get_data_from_hotgame(url)
 
 
+def make_simple_url(name: str) -> str:
+    """Создаёт ссылку на хотгейм без изменения названия"""
+    url = f"https://hot-game.info/game/{name}"
+    get_data_from_hotgame(url)
+
+
 def request_caller_for_lists(data: list[str]) -> None:
     """Вызывает функцию обращения по для каждой ссылки списка"""
     for url in data:
@@ -49,6 +55,10 @@ def get_name(mode: str = "input") -> None:
         with open('games.txt', 'r') as file:
             data = file.read().splitlines()
         request_caller_for_lists(data)
+    elif mode == "manual":
+        print("Введите название")
+        name = input()
+        make_simple_url(name)
     else:
         print("Доступные режимы - text - input")
 
@@ -57,7 +67,7 @@ def mode_selector() -> None:
     """Вызывает get_name, передавая туда название
     режима из консоли. Если режима нет, просто вызывает
     get_name()
-    Режимы: text и input"""
+    Режимы: text, manual и input"""
     try:
         mode = sys.argv[1]
         get_name(mode)
