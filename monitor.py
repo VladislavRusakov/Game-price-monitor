@@ -24,17 +24,13 @@ def get_data_from_hotgame(url: str) -> None:
 
 def make_an_url(name: str, mode: str) -> str:
     """Создаёт корректную ссылку на хотгейм"""
+    names = name.split(" ")
     if mode == "input":
         names = name.split(" ")
         for index, _ in enumerate(names):
             names[index] = _.capitalize()
-        url = f"https://hot-game.info/game/{'-'.join(names)}"
-        get_data_from_hotgame(url)
-
-    elif mode == "manual":
-        names = name.split(" ")
-        url = f"https://hot-game.info/game/{'-'.join(names)}"
-        get_data_from_hotgame(url)
+    url = f"https://hot-game.info/game/{'-'.join(names)}"
+    get_data_from_hotgame(url)
 
 
 def request_caller_for_lists(data: list[str]) -> None:
