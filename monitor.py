@@ -22,19 +22,19 @@ def get_data_from_hotgame(url: str) -> None:
         print(result.group(0))
 
 
-def make_an_url(name: str) -> str:
+def make_an_url(name: str, mode: str) -> str:
     """Создаёт корректную ссылку на хотгейм"""
-    names = name.split(" ")
-    for index, _ in enumerate(names):
-        names[index] = _.capitalize()
-    url = f"https://hot-game.info/game/{'-'.join(names)}"
-    get_data_from_hotgame(url)
+    if mode == "input":
+        names = name.split(" ")
+        for index, _ in enumerate(names):
+            names[index] = _.capitalize()
+        url = f"https://hot-game.info/game/{'-'.join(names)}"
+        get_data_from_hotgame(url)
 
-
-def make_simple_url(name: str) -> str:
-    """Создаёт ссылку на хотгейм без изменения названия"""
-    url = f"https://hot-game.info/game/{name}"
-    get_data_from_hotgame(url)
+    elif mode == "manual":
+        names = name.split(" ")
+        url = f"https://hot-game.info/game/{'-'.join(names)}"
+        get_data_from_hotgame(url)
 
 
 def request_caller_for_lists(data: list[str]) -> None:
@@ -46,21 +46,26 @@ def request_caller_for_lists(data: list[str]) -> None:
 def get_name(mode: str = "input") -> None:
     """Вызывает функции создания url в зависимости от режима
     Режим input предлагает ввод названия через консоль
-    Режим text читает названия из файла games.txt"""
+    Режим text читает названия из файла games.txt
+    Режим manual повторяет input для случаев, когда название
+    в ссылке используется с маленькой буквы"""
     if mode == "input":
         print("Введите название")
         name = input()
-        make_an_url(name)
+        make_an_url(name, mode)
+
     elif mode == "text":
         with open('games.txt', 'r') as file:
             data = file.read().splitlines()
         request_caller_for_lists(data)
+
     elif mode == "manual":
         print("Введите название")
         name = input()
-        make_simple_url(name)
+        make_an_url(name, mode)
+
     else:
-        print("Доступные режимы - text - input")
+        print("Доступные режимы - text - manual")
 
 
 def mode_selector() -> None:
