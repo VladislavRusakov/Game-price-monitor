@@ -21,12 +21,14 @@ def get_data_from_hotgame(url: str) -> None:
         result = re.search(pattern, str(data[0]))
         print(result.group(0))
 
+    else:
+        print(f"Статус ответа: {response.status_code}")
 
-def make_an_url(name: str, mode: str) -> str:
+
+def make_an_url(name: str, mode: str) -> None:
     """Создаёт корректную ссылку на хотгейм"""
     names = name.split(" ")
     if mode == "input":
-        names = name.split(" ")
         for index, _ in enumerate(names):
             names[index] = _.capitalize()
     url = f"https://hot-game.info/game/{'-'.join(names)}"
@@ -34,7 +36,8 @@ def make_an_url(name: str, mode: str) -> str:
 
 
 def request_caller_for_lists(data: list[str]) -> None:
-    """Вызывает функцию обращения по для каждой ссылки списка"""
+    """Для режима text. Вызывает функцию
+    get_data_from_hotgame для каждой ссылки списка"""
     for url in data:
         get_data_from_hotgame(url)
 
@@ -45,7 +48,7 @@ def get_name(mode: str = "input") -> None:
     Режим text читает названия из файла games.txt
     Режим manual повторяет input для случаев, когда название
     в ссылке используется с маленькой буквы"""
-    if mode == "input":
+    if mode == "input" or mode == "manual":
         print("Введите название")
         name = input()
         make_an_url(name, mode)
@@ -54,11 +57,6 @@ def get_name(mode: str = "input") -> None:
         with open('games.txt', 'r') as file:
             data = file.read().splitlines()
         request_caller_for_lists(data)
-
-    elif mode == "manual":
-        print("Введите название")
-        name = input()
-        make_an_url(name, mode)
 
     else:
         print("Доступные режимы - text - manual")
